@@ -1,0 +1,28 @@
+name: Deploy to Minikube (Local)
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v3
+
+    - name: Build Docker Image
+      run: |
+        docker build -t node-metrics-app:latest .
+
+    - name: Load Image into Minikube
+      run: |
+        minikube image load node-metrics-app:latest
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
+        kubectl rollout status deployment/node-app
+
