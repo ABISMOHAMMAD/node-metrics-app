@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    env: test
+  name: node-svc
+spec:
+  selector:  
+    env: test
+  ports: 
+    - port: 3000
+      targetPort: 3000
+  type: NodePort
