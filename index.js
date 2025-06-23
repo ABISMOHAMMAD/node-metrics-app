@@ -2,25 +2,29 @@ const express = require('express');
 const client = require('prom-client');
 
 const app = express();
-const collectDefaultMetrics = client.collectDefaultMetrics;
-collectDefaultMetrics();
+const port = 3000;
 
-const counter = new client.Counter({
-  name: 'my_custom_counter',
-  help: 'Example of a custom counter'
+// Enable collection of default metrics like memory, CPU, etc.
+client.collectDefaultMetrics();
+
+// Custom metric example
+const requestCounter = new client.Counter({
+  name: 'node_app_request_count',
+  help: 'Total number of requests to the root endpoint',
 });
 
 app.get('/', (req, res) => {
-  counter.inc();
-  res.send('Hello, world!');
+  requestCounter.inc(); // increment counter
+  res.send('✅ Node.js App is Running with Prometheus Metrics!');
 });
 
+// Prometheus metrics endpoint
 app.get('/metrics', async (req, res) => {
   res.set('Content-Type', client.register.contentType);
   res.end(await client.register.metrics());
 });
 
-app.listen(3000, () => {
-  console.log('App running on http://localhost:3000');
+app.listen(port, () => {
+  console.log(`🚀 App running at http://localhost:${port}`);
 });
 
