@@ -15,7 +15,7 @@ const requestCounter = new client.Counter({
 
 app.get('/', (req, res) => {
   requestCounter.inc(); // increment counter
-  res.send('✅ Node.js App is Running with Metrics!');
+  res.send('✅ Node.js App Running with Metrics!');
 });
 
 // Prometheus metrics endpoint
